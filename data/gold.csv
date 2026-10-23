@@ -44,3 +44,15 @@ e5f1c810,performance:pos|delivery:neg,test,"Кофе вкусный, доста�
 1d7731ae,durability:neg,dev,Отлично! Через два дня сломалась. Просто великолепно
 914448bd,noise:neg,dev,"Шум терпимый на тихом режиме, на турбо невыносим"
 dc4e7706,other:neg|support:neg,test,"Продавец прислал не тот цвет, заменить отказались"
+c82d0033,noise:pos,hard,"Совсем не шумит, соседи даже не заметили"
+2c75d162,durability:pos,hard,"Не сломалась, не протекает, всё как в описании"
+f008db20,delivery:pos,hard,"Доставили быстрее, чем обещали, спасибо курьеру"
+b5b047ca,noise:neg,hard,"Ну да, конечно, «тихий» режим. Я думал, у соседей перфоратор"
+651a83a1,price:neg|performance:pos,hard,"Дороговато, зато работает как часы"
+f83e336a,durability:pos,hard,Спустя полгода мотор всё ещё как новый
+8c24ef68,packaging:neg,hard,"Приехала в коробке, которую явно роняли, но внутри всё цело"
+3f930059,support:pos,hard,"Менеджер вежливо всё объяснил, замену оформили за день"
+6f146433,noise:neg|performance:pos,hard,The vacuum is loud but cleans well
+0328afc6,delivery:neg|performance:pos,hard,"Курьер опоздал на четыре дня, но кофемашина хорошая"
+8c345998,usability:neg,hard,"Приложение виснет, карта комнат не сохраняется"
+44f68c97,other:neu,hard,"Купила в подарок, пока не открывала"

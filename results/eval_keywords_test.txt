@@ -1,0 +1,23 @@
+Провайдер: keywords, выборка: test
+Отзывов: 15, полное совпадение: 13/15
+Метки тема+тон: precision 95%, recall 90%, F1 93%
+Только темы: F1 93%; тон среди угаданных тем: 100%
+
+По темам (в эталоне / угадано / лишних):
+  performance: 7 / 6 / 0
+  durability: 2 / 2 / 0
+  noise: 2 / 2 / 0
+  delivery: 2 / 2 / 1
+  packaging: 1 / 1 / 0
+  usability: 2 / 2 / 0
+  price: 2 / 2 / 0
+  support: 1 / 1 / 0
+  other: 2 / 1 / 0
+
+Расхождения (2):
+  [CM-2010, 5★] Кофе огонь, но коробка вскрыта при доставке
+      эталон: packaging:neg, performance:pos
+      модель: delivery:neg, packaging:neg
+  [CM-2010, 1★] Продавец прислал не тот цвет, заменить отказались
+      эталон: other:neg, support:neg
+      модель: support:neg

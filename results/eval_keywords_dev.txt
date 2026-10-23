@@ -1,0 +1,38 @@
+Провайдер: keywords, выборка: dev
+Отзывов: 30, полное совпадение: 23/30
+Метки тема+тон: precision 93%, recall 88%, F1 90%
+Только темы: F1 95%; тон среди угаданных тем: 95%
+
+По темам (в эталоне / угадано / лишних):
+  performance: 13 / 10 / 1
+  durability: 8 / 8 / 0
+  noise: 8 / 8 / 0
+  delivery: 4 / 4 / 0
+  packaging: 2 / 2 / 0
+  usability: 6 / 6 / 0
+  price: 1 / 1 / 0
+  support: 4 / 3 / 0
+  other: 2 / 2 / 0
+
+Расхождения (7):
+  [RV-0707, 4★] Чисто убирает ковры и ламинат, шумит терпимо
+      эталон: noise:neu, performance:pos
+      модель: noise:neg, performance:pos
+  [AF-5501, 4★] Нагревается быстро, дверца слегка скрипит
+      эталон: durability:neg, performance:pos
+      модель: durability:neg
+  [RV-0707, 3★] Убирает нормально, но очень шумный, соседи жалуются
+      эталон: noise:neg, performance:pos
+      модель: noise:neg
+  [CM-2010, 1★] Курьер потерял заказ, ждала почти две недели, никаких извинений
+      эталон: delivery:neg, support:neg
+      модель: delivery:neg
+  [CM-2010, 3★] Доставили за 7 дней вместо 3, машина нормальная
+      эталон: delivery:neg, performance:pos
+      модель: delivery:neg
+  [CM-2010, 5★] Ок
+      эталон: other:neu
+      модель: other:pos
+  [SM-3301, 5★] Отлично! Через два дня сломалась. Просто великолепно
+      эталон: durability:neg
+      модель: durability:neg, performance:pos

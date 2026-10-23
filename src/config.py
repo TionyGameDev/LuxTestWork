@@ -5,6 +5,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PROMPT_PATH = ROOT / "prompts" / "classify.md"
 CACHE_PATH = ROOT / "data" / "cache" / "labels.json"
 REVIEWS_PATH = ROOT / "data" / "reviews.csv"
+HARD_REVIEWS_PATH = ROOT / "data" / "reviews_hard.csv"  # трудные случаи только для оценки
 GOLD_PATH = ROOT / "data" / "gold.csv"
 RESULTS_DIR = ROOT / "results"
 

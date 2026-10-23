@@ -82,6 +82,18 @@ class AggregateTests(unittest.TestCase):
         self.assertEqual(s["top"][0]["count"], 2)
         self.assertEqual(len(s["mismatch"]), 2)
 
+    def test_same_review_is_not_example_for_two_themes(self):
+        both = review(5, rating=1)
+        only_noise = review(6, rating=2)
+        only_support = review(7, rating=3)
+        labels = {both.id: [["noise", "neg"], ["support", "neg"]],
+                  only_noise.id: [["noise", "neg"]],
+                  only_support.id: [["support", "neg"]]}
+        top = summarize([both, only_noise, only_support], labels)["top"]
+        examples = {t["theme"]: [r.id for r in t["examples"]] for t in top}
+        self.assertEqual(examples["noise"], [both.id, only_noise.id])
+        self.assertEqual(examples["support"], [only_support.id])
+
     def test_unlabeled_reviews_are_reported_as_pending(self):
         reviews = [review(5), review(6)]
         s = summarize(reviews, {reviews[0].id: [["noise", "neg"]]})

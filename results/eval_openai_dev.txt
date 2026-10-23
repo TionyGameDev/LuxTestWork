@@ -1,0 +1,26 @@
+Провайдер: openai, выборка: dev
+Отзывов: 30, полное совпадение: 27/30
+Метки тема+тон: precision 94%, recall 98%, F1 96%
+Только темы: F1 98%; тон среди угаданных тем: 98%
+
+По темам (в эталоне / угадано / лишних):
+  performance: 13 / 13 / 1
+  durability: 8 / 8 / 1
+  noise: 8 / 8 / 0
+  delivery: 4 / 4 / 0
+  packaging: 2 / 2 / 0
+  usability: 6 / 6 / 0
+  price: 1 / 1 / 0
+  support: 4 / 4 / 0
+  other: 2 / 2 / 0
+
+Расхождения (3):
+  [SM-3301, 3★] Работает нормально. Но тяжёлая.
+      эталон: performance:pos, usability:neg
+      модель: performance:neu, usability:neg
+  [AF-5501, 2★] Дверца перестала закрываться плотно, греет то да то нет
+      эталон: durability:neg
+      модель: durability:neg, performance:neg
+  [RV-0707, 1★] Начал гудеть через месяц, служба поддержки ответила шаблоном
+      эталон: noise:neg, support:neg
+      модель: durability:neg, noise:neg, support:neg

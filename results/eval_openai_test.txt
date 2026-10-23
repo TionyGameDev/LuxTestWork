@@ -1,0 +1,20 @@
+Провайдер: openai, выборка: test
+Отзывов: 15, полное совпадение: 14/15
+Метки тема+тон: precision 95%, recall 95%, F1 95%
+Только темы: F1 100%; тон среди угаданных тем: 95%
+
+По темам (в эталоне / угадано / лишних):
+  performance: 7 / 7 / 0
+  durability: 2 / 2 / 0
+  noise: 2 / 2 / 0
+  delivery: 2 / 2 / 0
+  packaging: 1 / 1 / 0
+  usability: 2 / 2 / 0
+  price: 2 / 2 / 0
+  support: 1 / 1 / 0
+  other: 2 / 2 / 0
+
+Расхождения (1):
+  [CM-2010, 4★] Кофе вкусный, доставка 6 дней
+      эталон: delivery:neg, performance:pos
+      модель: delivery:neu, performance:pos

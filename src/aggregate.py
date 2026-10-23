@@ -58,9 +58,14 @@ def summarize(reviews, labels, end=None):
     top = []
     for t, n in cur_neg.items():
         rs = sorted((r for r in cur if t in _topics(labels, r.id, "neg")), key=lambda r: (r.rating, r.text))
-        top.append({"theme": t, "count": n, "prev": prev_neg.get(t, 0),
-                    "avg": _avg(rs), "examples": rs[:2]})
+        top.append({"theme": t, "count": n, "prev": prev_neg.get(t, 0), "avg": _avg(rs), "reviews": rs})
     top.sort(key=lambda x: (-x["count"], x["avg"]))
+    top = top[:3]
+    shown = set()  # один отзыв не показываем примером сразу для нескольких тем
+    for item in top:
+        fresh = [r for r in item["reviews"] if r.id not in shown] or item["reviews"]
+        item["examples"] = fresh[:2]
+        shown.update(r.id for r in item["examples"])
 
     changes = []
     for t in sorted(set(cur_neg) | set(prev_neg)):
@@ -88,6 +93,6 @@ def summarize(reviews, labels, end=None):
         "n": len(cur), "prev_n": len(prev), "pending": pending,
         "avg": _avg(cur), "prev_avg": _avg(prev),
         "complaint_reviews": with_complaint(cur), "prev_complaint_reviews": with_complaint(prev),
-        "themes": themes, "top": top[:3], "changes": changes,
+        "themes": themes, "top": top, "changes": changes,
         "skus": skus, "mismatch": mismatch,
     }

@@ -7,7 +7,7 @@ import csv
 import sys
 
 from .classify import LLMError, classify
-from .config import GOLD_PATH, REVIEWS_PATH, RESULTS_DIR, THEMES, load_env
+from .config import GOLD_PATH, HARD_REVIEWS_PATH, REVIEWS_PATH, RESULTS_DIR, THEMES, load_env
 from .load import load_reviews
 
 
@@ -88,14 +88,18 @@ def main(argv=None):
         sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description="Оценка точности разметки по эталону")
     p.add_argument("--provider", choices=["llm", "openai", "keywords"], default="llm")
-    p.add_argument("--split", choices=["dev", "test", "all"], default="all")
+    p.add_argument("--split", choices=["dev", "test", "hard", "all"], default="all")
     p.add_argument("--force", action="store_true", help="игнорировать кэш разметки")
     args = p.parse_args(argv)
 
     try:
         reviews, _ = load_reviews(REVIEWS_PATH)
+        if HARD_REVIEWS_PATH.exists():
+            reviews += load_reviews(HARD_REVIEWS_PATH)[0]
         gold = load_gold(GOLD_PATH)
-        subset = [r for r in reviews if r.id in gold and args.split in ("all", gold[r.id][1])]
+        # "all" это dev + test: трудные случаи считаются отдельно (--split hard)
+        subset = [r for r in reviews if r.id in gold and (
+            gold[r.id][1] == args.split or (args.split == "all" and gold[r.id][1] != "hard"))]
         predicted, pending = classify(subset, args.provider, args.force, log=lambda m: print(m, file=sys.stderr))
     except (OSError, ValueError, LLMError) as e:
         print(f"ошибка: {e}", file=sys.stderr)
