@@ -31,7 +31,7 @@ DEFAULT_MODEL = "claude-haiku-5-5"
 # OpenAI-совместимый провайдер; по умолчанию OpenRouter с бесплатной моделью (список меняется,
 # актуальные бесплатные модели: https://openrouter.ai/models?max_price=0)
 DEFAULT_OPENAI_BASE = "https://openrouter.ai/api/v1"
-DEFAULT_OPENAI_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+DEFAULT_OPENAI_MODEL = "google/gemma-4-26b-a4b-it:free"
 
 
 def load_env(path=None):

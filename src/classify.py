@@ -52,11 +52,19 @@ def call_anthropic(system, user, model, key):
 
 def call_openai_compatible(system, user, model, key):
     """Любой сервис с OpenAI-совместимым chat/completions: OpenRouter, Groq, Together и др."""
-    base = os.environ.get("LLM_BASE_URL", DEFAULT_OPENAI_BASE).rstrip("/")
-    data = _post_json(f"{base}/chat/completions", {"authorization": f"Bearer {key}"}, {
-        "model": model, "temperature": 0,
-        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-    })
+    base = os.environ.get("LLM_BASE_URL") or DEFAULT_OPENAI_BASE
+    url = f"{base.rstrip('/')}/chat/completions"
+    headers = {"authorization": f"Bearer {key}"}
+    body = {"model": model, "temperature": 0,
+            "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
+    try:
+        data = _post_json(url, headers, body)
+    except FatalLLMError as e:
+        # Некоторые модели (в том числе Gemma у части провайдеров) не принимают системный промпт.
+        if not any(w in str(e).lower() for w in ("instruction", "system")):
+            raise
+        body["messages"] = [{"role": "user", "content": f"{system}\n\n---\n\n{user}"}]
+        data = _post_json(url, headers, body)
     try:
         return data["choices"][0]["message"]["content"] or ""
     except (KeyError, IndexError, TypeError):
