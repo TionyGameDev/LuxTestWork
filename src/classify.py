@@ -16,6 +16,10 @@ class LLMError(RuntimeError):
     pass
 
 
+class FatalLLMError(LLMError):
+    """Ошибка, которую повтор не исправит: неверный ключ, нет денег на счёте, неверный запрос."""
+
+
 def prompt_text():
     themes = "\n".join(f"- {tid}: {name}. {hint}" for tid, (name, hint) in THEMES.items())
     return PROMPT_PATH.read_text(encoding="utf-8").replace("{{THEMES}}", themes)
@@ -41,7 +45,8 @@ def call_llm(system, user, model, key):
         with urllib.request.urlopen(req, timeout=60) as resp:
             data = json.load(resp)
     except urllib.error.HTTPError as e:
-        raise LLMError(f"HTTP {e.code}: {e.read()[:300].decode('utf-8', 'replace')}") from None
+        detail = f"HTTP {e.code}: {e.read()[:300].decode('utf-8', 'replace')}"
+        raise (FatalLLMError if e.code in (400, 401, 403, 404) else LLMError)(detail) from None
     except (urllib.error.URLError, TimeoutError) as e:
         raise LLMError(f"сеть: {e.__class__.__name__}") from None
     return "".join(b.get("text", "") for b in data.get("content", []))
@@ -113,6 +118,8 @@ def classify_batches(reviews, model, key, log=print):
                 payload["previous_errors"] = prev_errors
             try:
                 answer = extract_json(call_llm(system, json.dumps(payload, ensure_ascii=False), model, key))
+            except FatalLLMError:
+                raise
             except (LLMError, ValueError) as e:
                 errors.append(str(e))
                 log(f"попытка {attempt}: {e}")
