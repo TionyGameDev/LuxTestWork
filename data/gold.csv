@@ -1,0 +1,46 @@
+id,labels,split,text
+a3a9fabd,performance:pos|noise:neu,dev,"Чисто убирает ковры и ламинат, шумит терпимо"
+ab53c6e0,performance:pos|usability:pos,dev,"Готовит быстро, корзина легко моется"
+07615bae,performance:pos|delivery:pos,test,"Кофе вкусный, приехала за два дня"
+b63694cb,performance:pos|usability:neg,dev,"Хорошо отпаривает пятна на плитке, но шнур коротковат"
+4cbfc99d,performance:pos|durability:neg,dev,"Мясо получается сочным, но запах пластика первые дни"
+ca3be601,performance:neg,test,"Застрял под диваном дважды, пришлось доставать"
+8751ce16,performance:pos,dev,"Капучинатор работает отлично, пена плотная"
+aeb8338c,other:pos,dev,"Супер, беру второй такой маме"
+faada3c3,durability:neg,test,Через неделю перестала подавать пар
+25ae05d7,usability:pos,dev,"Приложение удобное, карту квартиры строит быстро"
+9cbccbc0,packaging:neg,dev,"Коробка пришла помятая, но кофемашина целая"
+0feb6417,price:pos,test,Цена приятная за такой объём
+bc2208f5,performance:pos|usability:neg,dev,Работает нормально. Но тяжёлая.
+d0081a9e,durability:neg|support:neg,dev,Не включается после зарядки. Поддержка просила прислать видео и пропала
+56c46efd,other:pos,test,"Просто огонь, спасибо"
+8111097f,performance:pos|durability:neg,dev,"Нагревается быстро, дверца слегка скрипит"
+50d23f81,performance:pos|noise:neg,dev,"Отличная швабра, но гудит как самолёт, соседи в шоке"
+2d28ff45,noise:neg,test,"Гудит так, что телевизор не слышно, ночью включать невозможно"
+18da17f1,performance:pos|delivery:neg,dev,"Кофе вкусный, но доставка 9 дней"
+ecf7293f,durability:neg,dev,Через две недели пластик на корзине потрескался
+1c98b1a9,performance:pos,test,"Картошка фри без масла, вся семья довольна"
+52f2c7e7,performance:pos|noise:neg,dev,"Убирает нормально, но очень шумный, соседи жалуются"
+ad50e58a,delivery:neg|support:neg,dev,"Курьер потерял заказ, ждала почти две недели, никаких извинений"
+856e0150,performance:pos,test,"Паровая швабра хорошая, греется за 30 секунд"
+eba9cff8,performance:neg|noise:neg,dev,"Застревает под диваном, шумит"
+e31cdee0,durability:neg,dev,"Дверца перестала закрываться плотно, греет то да то нет"
+b5388138,performance:pos|packaging:neg,test,"Кофе огонь, но коробка вскрыта при доставке"
+bd3be660,durability:neg|support:neg,dev,"Протекает вода из бака, вернули деньги не сразу"
+101890c7,noise:neg,dev,"Ужасный звук мотора, как у дрели. Верну"
+4983ac3a,usability:pos|price:neg,test,"Размер подходит для семьи из четырёх, но цена завышена"
+99aa8d60,delivery:neg|performance:pos,dev,"Доставили за 7 дней вместо 3, машина нормальная"
+5801cd26,usability:pos|noise:neg,dev,"Нравится, что сам возвращается на базу, но шумит"
+bc573c46,durability:neg,test,"Сломалась на третий день, греть перестала"
+4de3d9cb,performance:pos,dev,"Отличная вещь, полы блестят"
+b37ae278,delivery:neg|packaging:neg,dev,"Ждал 10 дней, потом ещё упаковка порвана"
+6735f5a8,usability:neg|noise:neg,test,"Приложение постоянно теряет связь, шум ужасный"
+af083da1,durability:neg,dev,"Запах горелого пластика при нагреве, возвращаю"
+a5e208b2,other:neu,dev,Ок
+600f0f1b,performance:neg,test,"Пар слабый, пятна оттирает плохо"
+37d57dd6,noise:neg|support:neg,dev,"Начал гудеть через месяц, служба поддержки ответила шаблоном"
+cbdf0648,price:pos|usability:neg,dev,"Для своей цены нормально, но мыть сложно, много щелей"
+e5f1c810,performance:pos|delivery:neg,test,"Кофе вкусный, доставка 6 дней"
+1d7731ae,durability:neg,dev,Отлично! Через два дня сломалась. Просто великолепно
+914448bd,noise:neg,dev,"Шум терпимый на тихом режиме, на турбо невыносим"
+dc4e7706,other:neg|support:neg,test,"Продавец прислал не тот цвет, заменить отказались"

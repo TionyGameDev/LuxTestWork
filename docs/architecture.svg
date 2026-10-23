@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 620" width="820" height="620" font-family="Segoe UI, Arial, sans-serif" font-size="14">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="820" height="620" fill="#ffffff"/>
+  <text x="30" y="32" font-size="18" font-weight="600" fill="#222">Как отзывы превращаются в сводку</text>
+
+  <g stroke="#555" stroke-width="1.5" marker-end="url(#arrow)" fill="none">
+    <line x1="230" y1="102" x2="230" y2="128"/>
+    <line x1="230" y1="182" x2="230" y2="208"/>
+    <line x1="230" y1="262" x2="230" y2="288"/>
+    <line x1="230" y1="342" x2="230" y2="368"/>
+    <line x1="230" y1="422" x2="230" y2="448"/>
+    <line x1="230" y1="502" x2="230" y2="528"/>
+  </g>
+
+  <g fill="#fdf1e6" stroke="#d9a077" stroke-width="1.5">
+    <rect x="60" y="50" width="340" height="52" rx="8"/>
+    <rect x="60" y="128" width="340" height="54" rx="8"/>
+    <rect x="60" y="368" width="340" height="54" rx="8"/>
+    <rect x="60" y="448" width="340" height="54" rx="8"/>
+  </g>
+  <g fill="#eaf3fb" stroke="#7aa6cf" stroke-width="1.5">
+    <rect x="60" y="208" width="340" height="54" rx="8"/>
+    <rect x="60" y="288" width="340" height="54" rx="8"/>
+  </g>
+  <rect x="60" y="528" width="340" height="52" rx="8" fill="#e8f5ea" stroke="#78b383" stroke-width="1.5"/>
+
+  <g fill="#222" text-anchor="middle">
+    <text x="230" y="73" font-weight="600">Источник отзывов</text>
+    <text x="230" y="92" font-size="12" fill="#555">CSV сейчас, API маркетплейса позже</text>
+    <text x="230" y="151" font-weight="600">load.py</text>
+    <text x="230" y="171" font-size="12" fill="#555">чтение, проверка строк, id отзыва</text>
+    <text x="230" y="231" font-weight="600">classify.py: LLM (Claude)</text>
+    <text x="230" y="251" font-size="12" fill="#555">темы и тон, пачки по 10, кэш разметки</text>
+    <text x="230" y="311" font-weight="600">Проверка ответа модели</text>
+    <text x="230" y="331" font-size="12" fill="#555">схема, повтор с текстом ошибки, pending</text>
+    <text x="230" y="391" font-weight="600">aggregate.py</text>
+    <text x="230" y="411" font-size="12" fill="#555">счётчики, топ жалоб, неделя к неделе (код, не LLM)</text>
+    <text x="230" y="471" font-weight="600">report.py</text>
+    <text x="230" y="491" font-size="12" fill="#555">HTML-сводка, цитаты из исходных текстов</text>
+    <text x="230" y="551" font-weight="600">Telegram → команда</text>
+  </g>
+
+  <g fill="#f3f0fa" stroke="#9b8cc9" stroke-width="1.5">
+    <rect x="470" y="128" width="300" height="76" rx="8"/>
+    <rect x="470" y="288" width="300" height="104" rx="8"/>
+  </g>
+  <g fill="#222">
+    <text x="486" y="152" font-weight="600">Расписание</text>
+    <text x="486" y="172" font-size="12" fill="#555">GitHub Actions, cron: понедельник 06:00 UTC</text>
+    <text x="486" y="190" font-size="12" fill="#555">сначала тесты, затем сводка</text>
+    <text x="486" y="312" font-weight="600">Контроль качества</text>
+    <text x="486" y="332" font-size="12" fill="#555">data/gold.csv: ручной эталон (dev / test)</text>
+    <text x="486" y="350" font-size="12" fill="#555">evaluate.py: precision, recall, F1,</text>
+    <text x="486" y="368" font-size="12" fill="#555">список расхождений модель vs эталон</text>
+  </g>
+  <g stroke="#9b8cc9" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#arrow)">
+    <path d="M470 166 H430 V155 H402"/>
+    <path d="M470 340 H402"/>
+  </g>
+</svg>

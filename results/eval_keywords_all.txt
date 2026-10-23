@@ -1,0 +1,44 @@
+Провайдер: keywords, выборка: all
+Отзывов: 45, полное совпадение: 36/45
+Метки тема+тон: precision 94%, recall 88%, F1 91%
+Только темы: F1 94%; тон среди угаданных тем: 97%
+
+По темам (в эталоне / угадано / лишних):
+  performance: 20 / 16 / 1
+  durability: 10 / 10 / 0
+  noise: 10 / 10 / 0
+  delivery: 6 / 6 / 1
+  packaging: 3 / 3 / 0
+  usability: 8 / 8 / 0
+  price: 3 / 3 / 0
+  support: 5 / 4 / 0
+  other: 4 / 3 / 0
+
+Расхождения (9):
+  [RV-0707, 4★] Чисто убирает ковры и ламинат, шумит терпимо
+      эталон: noise:neu, performance:pos
+      модель: noise:neg, performance:pos
+  [AF-5501, 4★] Нагревается быстро, дверца слегка скрипит
+      эталон: durability:neg, performance:pos
+      модель: durability:neg
+  [RV-0707, 3★] Убирает нормально, но очень шумный, соседи жалуются
+      эталон: noise:neg, performance:pos
+      модель: noise:neg
+  [CM-2010, 1★] Курьер потерял заказ, ждала почти две недели, никаких извинений
+      эталон: delivery:neg, support:neg
+      модель: delivery:neg
+  [CM-2010, 5★] Кофе огонь, но коробка вскрыта при доставке
+      эталон: packaging:neg, performance:pos
+      модель: delivery:neg, packaging:neg
+  [CM-2010, 3★] Доставили за 7 дней вместо 3, машина нормальная
+      эталон: delivery:neg, performance:pos
+      модель: delivery:neg
+  [CM-2010, 5★] Ок
+      эталон: other:neu
+      модель: other:pos
+  [SM-3301, 5★] Отлично! Через два дня сломалась. Просто великолепно
+      эталон: durability:neg
+      модель: durability:neg, performance:pos
+  [CM-2010, 1★] Продавец прислал не тот цвет, заменить отказались
+      эталон: other:neg, support:neg
+      модель: support:neg
