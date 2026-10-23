@@ -2,7 +2,7 @@ import unittest
 from datetime import date
 
 from src.aggregate import split_weeks, summarize, trend
-from src.classify import extract_json, validate
+from src.classify import RateLimitError, call_with_backoff, extract_json, validate
 from src.load import Review, make_id
 from src.report import render, split_messages
 
@@ -33,6 +33,27 @@ class ValidateTests(unittest.TestCase):
 
     def test_extract_json_strips_markdown_fence(self):
         self.assertEqual(extract_json('```json\n{"results": []}\n```'), {"results": []})
+
+
+class BackoffTests(unittest.TestCase):
+    def test_retries_rate_limit_then_succeeds(self):
+        attempts = []
+
+        def call(system, user):
+            attempts.append(1)
+            if len(attempts) < 3:
+                raise RateLimitError("429")
+            return "ok"
+
+        self.assertEqual(call_with_backoff(call, "s", "u", log=lambda m: None, waits=(0, 0)), "ok")
+        self.assertEqual(len(attempts), 3)
+
+    def test_gives_up_after_waits_are_exhausted(self):
+        def call(system, user):
+            raise RateLimitError("429")
+
+        with self.assertRaises(RateLimitError):
+            call_with_backoff(call, "s", "u", log=lambda m: None, waits=(0,))
 
 
 class AggregateTests(unittest.TestCase):

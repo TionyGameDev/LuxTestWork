@@ -16,6 +16,10 @@ class LLMError(RuntimeError):
     pass
 
 
+class RateLimitError(LLMError):
+    """429 или временная перегрузка: помогает только ожидание."""
+
+
 class FatalLLMError(LLMError):
     """Ошибка, которую повтор не исправит: неверный ключ, нет денег на счёте, неверный запрос."""
 
@@ -37,6 +41,8 @@ def _post_json(url, headers, payload):
             return json.load(resp)
     except urllib.error.HTTPError as e:
         detail = f"HTTP {e.code}: {e.read()[:300].decode('utf-8', 'replace')}"
+        if e.code in (429, 502, 503):
+            raise RateLimitError(detail) from None
         raise (FatalLLMError if e.code in (400, 401, 403, 404) else LLMError)(detail) from None
     except (urllib.error.URLError, TimeoutError, ValueError) as e:
         raise LLMError(f"сеть или формат ответа: {e.__class__.__name__}") from None
@@ -127,6 +133,19 @@ def validate(answer, ids):
     return good, errors
 
 
+RATE_LIMIT_WAITS = (15, 30, 60, 90)  # секунд; лимиты бесплатных моделей считаются по минутам
+
+
+def call_with_backoff(call, system, user, log=print, waits=RATE_LIMIT_WAITS):
+    for wait in waits:
+        try:
+            return call(system, user)
+        except RateLimitError:
+            log(f"лимит запросов, жду {wait} с")
+            time.sleep(wait)
+    return call(system, user)
+
+
 def classify_batches(reviews, call, log=print):
     """Размечает пачками. При ошибке валидации повторяет запрос только по проблемным отзывам
     и передаёт модели текст ошибок. Что не удалось за RETRIES попыток, возвращается как pending.
@@ -143,7 +162,7 @@ def classify_batches(reviews, call, log=print):
             if attempt > 1:
                 payload["previous_errors"] = prev_errors
             try:
-                answer = extract_json(call(system, json.dumps(payload, ensure_ascii=False)))
+                answer = extract_json(call_with_backoff(call, system, json.dumps(payload, ensure_ascii=False), log))
             except FatalLLMError:
                 raise
             except (LLMError, ValueError) as e:
