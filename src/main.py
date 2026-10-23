@@ -17,7 +17,8 @@ def main(argv=None):
         sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description="Еженедельная сводка по отзывам")
     p.add_argument("--csv", default=str(REVIEWS_PATH), help="файл с отзывами (DATE,SKU,RATING,TEXT)")
-    p.add_argument("--provider", choices=["llm", "keywords"], default="llm")
+    p.add_argument("--provider", choices=["llm", "openai", "keywords"], default="llm",
+                   help="llm: Anthropic; openai: OpenAI-совместимый API (OpenRouter и др.); keywords: без ключей")
     p.add_argument("--end", help="последний день недели, ДД.ММ.ГГГГ (по умолчанию последний день в данных)")
     p.add_argument("--force", action="store_true", help="игнорировать кэш разметки")
     p.add_argument("--send", action="store_true", help="отправить в Telegram (иначе только печать)")

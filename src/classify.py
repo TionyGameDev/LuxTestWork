@@ -5,8 +5,8 @@ import time
 import urllib.error
 import urllib.request
 
-from .config import (BATCH_SIZE, CACHE_PATH, DEFAULT_MODEL, PROMPT_PATH, RETRIES,
-                     SENTIMENTS, THEMES)
+from .config import (BATCH_SIZE, CACHE_PATH, DEFAULT_MODEL, DEFAULT_OPENAI_BASE,
+                     DEFAULT_OPENAI_MODEL, PROMPT_PATH, RETRIES, SENTIMENTS, THEMES)
 from .keywords import classify_keywords
 
 API_URL = "https://api.anthropic.com/v1/messages"
@@ -29,27 +29,44 @@ def prompt_version():
     return hashlib.sha1(prompt_text().encode("utf-8")).hexdigest()[:8]
 
 
-def call_llm(system, user, model, key):
-    body = json.dumps({
-        "model": model,
-        "max_tokens": 4096,
-        "system": system,
-        "messages": [{"role": "user", "content": user}],
-    }).encode("utf-8")
-    req = urllib.request.Request(API_URL, data=body, headers={
-        "content-type": "application/json",
-        "x-api-key": key,
-        "anthropic-version": "2023-06-01",
-    })
+def _post_json(url, headers, payload):
+    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
+                                 headers={"content-type": "application/json", **headers})
     try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            data = json.load(resp)
+        with urllib.request.urlopen(req, timeout=90) as resp:
+            return json.load(resp)
     except urllib.error.HTTPError as e:
         detail = f"HTTP {e.code}: {e.read()[:300].decode('utf-8', 'replace')}"
         raise (FatalLLMError if e.code in (400, 401, 403, 404) else LLMError)(detail) from None
-    except (urllib.error.URLError, TimeoutError) as e:
-        raise LLMError(f"сеть: {e.__class__.__name__}") from None
+    except (urllib.error.URLError, TimeoutError, ValueError) as e:
+        raise LLMError(f"сеть или формат ответа: {e.__class__.__name__}") from None
+
+
+def call_anthropic(system, user, model, key):
+    data = _post_json(API_URL, {"x-api-key": key, "anthropic-version": "2023-06-01"}, {
+        "model": model, "max_tokens": 4096, "system": system,
+        "messages": [{"role": "user", "content": user}],
+    })
     return "".join(b.get("text", "") for b in data.get("content", []))
+
+
+def call_openai_compatible(system, user, model, key):
+    """Любой сервис с OpenAI-совместимым chat/completions: OpenRouter, Groq, Together и др."""
+    base = os.environ.get("LLM_BASE_URL", DEFAULT_OPENAI_BASE).rstrip("/")
+    data = _post_json(f"{base}/chat/completions", {"authorization": f"Bearer {key}"}, {
+        "model": model, "temperature": 0,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+    })
+    try:
+        return data["choices"][0]["message"]["content"] or ""
+    except (KeyError, IndexError, TypeError):
+        raise LLMError("неожиданный формат ответа API") from None
+
+
+PROVIDERS = {
+    "llm": (call_anthropic, "ANTHROPIC_API_KEY", DEFAULT_MODEL),
+    "openai": (call_openai_compatible, "LLM_API_KEY", DEFAULT_OPENAI_MODEL),
+}
 
 
 def extract_json(text):
@@ -102,9 +119,10 @@ def validate(answer, ids):
     return good, errors
 
 
-def classify_batches(reviews, model, key, log=print):
+def classify_batches(reviews, call, log=print):
     """Размечает пачками. При ошибке валидации повторяет запрос только по проблемным отзывам
-    и передаёт модели текст ошибок. Что не удалось за RETRIES попыток, возвращается как pending."""
+    и передаёт модели текст ошибок. Что не удалось за RETRIES попыток, возвращается как pending.
+    `call(system, user)` возвращает текст ответа модели."""
     system = prompt_text()
     labels, todo, errors = {}, list(reviews), []
     for attempt in range(1, RETRIES + 1):
@@ -117,7 +135,7 @@ def classify_batches(reviews, model, key, log=print):
             if attempt > 1:
                 payload["previous_errors"] = prev_errors
             try:
-                answer = extract_json(call_llm(system, json.dumps(payload, ensure_ascii=False), model, key))
+                answer = extract_json(call(system, json.dumps(payload, ensure_ascii=False)))
             except FatalLLMError:
                 raise
             except (LLMError, ValueError) as e:
@@ -147,11 +165,12 @@ def _save_cache(cache):
     CACHE_PATH.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
-def classify_llm(reviews, force=False, log=print):
-    key = os.environ.get("ANTHROPIC_API_KEY")
+def classify_llm(reviews, provider="llm", force=False, log=print):
+    call_api, key_var, default_model = PROVIDERS[provider]
+    key = os.environ.get(key_var)
     if not key:
-        raise LLMError("нет ANTHROPIC_API_KEY (см. .env.example) или запустите с --provider keywords")
-    model = os.environ.get("REVIEW_LLM_MODEL", DEFAULT_MODEL)
+        raise LLMError(f"нет {key_var} (см. .env.example) или запустите с --provider keywords")
+    model = os.environ.get("REVIEW_LLM_MODEL") or default_model
     version = prompt_version()
     cache = {} if force else _load_cache()
     k = lambda r: f"{r.id}:{version}:{model}"
@@ -159,7 +178,7 @@ def classify_llm(reviews, force=False, log=print):
     todo = [r for r in reviews if r.id not in labels]
     pending = []
     if todo:
-        fresh, pending = classify_batches(todo, model, key, log)
+        fresh, pending = classify_batches(todo, lambda s, u: call_api(s, u, model, key), log)
         labels.update(fresh)
         cache.update({k(r): fresh[r.id] for r in todo if r.id in fresh})
         _save_cache(cache)
@@ -170,6 +189,6 @@ def classify(reviews, provider="llm", force=False, log=print):
     """Единая точка входа. Тихого перехода с LLM на ключевые слова нет: провайдер выбирает пользователь."""
     if provider == "keywords":
         return classify_keywords(reviews), []
-    if provider == "llm":
-        return classify_llm(reviews, force, log)
+    if provider in PROVIDERS:
+        return classify_llm(reviews, provider, force, log)
     raise ValueError(f"неизвестный провайдер {provider!r}")

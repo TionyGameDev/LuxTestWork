@@ -28,6 +28,10 @@ RETRIES = 3
 MIN_SIGNAL = 3          # меньше стольких жалоб не называем это трендом
 TELEGRAM_LIMIT = 4000   # лимит Telegram 4096, оставляем запас
 DEFAULT_MODEL = "claude-haiku-5-5"
+# OpenAI-совместимый провайдер; по умолчанию OpenRouter с бесплатной моделью (список меняется,
+# актуальные бесплатные модели: https://openrouter.ai/models?max_price=0)
+DEFAULT_OPENAI_BASE = "https://openrouter.ai/api/v1"
+DEFAULT_OPENAI_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
 
 def load_env(path=None):

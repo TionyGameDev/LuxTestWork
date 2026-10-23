@@ -87,7 +87,7 @@ def main(argv=None):
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description="Оценка точности разметки по эталону")
-    p.add_argument("--provider", choices=["llm", "keywords"], default="llm")
+    p.add_argument("--provider", choices=["llm", "openai", "keywords"], default="llm")
     p.add_argument("--split", choices=["dev", "test", "all"], default="all")
     p.add_argument("--force", action="store_true", help="игнорировать кэш разметки")
     args = p.parse_args(argv)

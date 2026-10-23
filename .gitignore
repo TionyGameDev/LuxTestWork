@@ -182,3 +182,5 @@ cython_debug/
 # Project
 data/cache/
 results/*.tmp
+Luxhomme_Тестовое_задание.pdf
+.idea/

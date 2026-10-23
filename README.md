@@ -20,6 +20,12 @@ python -m src --provider keywords
 python -m src --provider llm
 ```
 
+**2б. Без оплаты Anthropic.** Подойдёт любой OpenAI-совместимый API, например OpenRouter с бесплатной моделью. Впишите `LLM_API_KEY` (при необходимости `LLM_BASE_URL` и `REVIEW_LLM_MODEL`) и запускайте с `--provider openai`:
+
+```bash
+python -m src --provider openai
+```
+
 **3. С отправкой в Telegram.** Создайте бота через @BotFather, впишите `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` в `.env`:
 
 ```bash
