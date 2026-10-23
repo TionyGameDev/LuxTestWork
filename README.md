@@ -26,6 +26,17 @@ python -m src --provider llm
 python -m src --provider openai
 ```
 
+**2в. Локальная модель (Ollama), без ключей и лимитов.** Установите Ollama, выполните `ollama pull qwen2.5:7b` и впишите в `.env`:
+
+```
+LLM_API_KEY=ollama
+LLM_BASE_URL=http://localhost:11434/v1
+REVIEW_LLM_MODEL=qwen2.5:7b
+LLM_TIMEOUT=300
+```
+
+Запуск тот же: `python -m src --provider openai`.
+
 **3. С отправкой в Telegram.** Создайте бота через @BotFather, впишите `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` в `.env`:
 
 ```bash

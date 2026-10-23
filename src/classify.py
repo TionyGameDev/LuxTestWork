@@ -37,7 +37,7 @@ def _post_json(url, headers, payload):
     req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
                                  headers={"content-type": "application/json", **headers})
     try:
-        with urllib.request.urlopen(req, timeout=90) as resp:
+        with urllib.request.urlopen(req, timeout=int(os.environ.get("LLM_TIMEOUT") or 90)) as resp:
             return json.load(resp)
     except urllib.error.HTTPError as e:
         detail = f"HTTP {e.code}: {e.read()[:300].decode('utf-8', 'replace')}"
