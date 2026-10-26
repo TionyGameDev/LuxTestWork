@@ -25,7 +25,14 @@ jobs:
           python-version: "3.12"
       - name: Собрать и отправить сводку
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          REVIEW_LLM_MODEL: ${{ secrets.REVIEW_LLM_MODEL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python -m src --provider llm --send
+        run: |
+          if [ -z "$LLM_API_KEY" ] || [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "::notice::Секреты не заданы (Settings -> Secrets and variables -> Actions), сводка пропущена"
+            exit 0
+          fi
+          python -m src --provider openai --send

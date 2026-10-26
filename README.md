@@ -94,6 +94,8 @@
 python -m src --provider openai --send
 ```
 
+> **Запуск по расписанию (GitHub Actions).** Добавьте в репозитории секреты (Settings → Secrets and variables → Actions): `LLM_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (по желанию `LLM_BASE_URL` и `REVIEW_LLM_MODEL`). Пока секретов нет, запуск не падает, а пропускает отправку с пояснением.
+
 > На Windows вместо `python` может понадобиться `py`: `py -m src --provider openai --send`. Если Telegram не настроен, уберите `--send`: сводка просто напечатается в консоли.
 
 <details>
