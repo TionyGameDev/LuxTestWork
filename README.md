@@ -88,6 +88,14 @@
 
 Ключи хранятся в файле `.env` (в git он не попадает). Образец: [`.env.example`](.env.example).
 
+**Полный запуск: разметка моделью и отправка сводки в Telegram:**
+
+```bash
+python -m src --provider openai --send
+```
+
+> На Windows вместо `python` может понадобиться `py`: `py -m src --provider openai --send`. Если Telegram не настроен, уберите `--send`: сводка просто напечатается в консоли.
+
 <details>
 <summary><b>Пример настройки OpenRouter (бесплатная модель)</b></summary>
 
