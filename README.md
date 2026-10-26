@@ -78,19 +78,28 @@ python -m unittest discover -s tests -t .            # тесты
 
 ```bash
 python -m src.evaluate --provider keywords --split all
-python -m src.evaluate --provider llm --split dev
-python -m src.evaluate --provider llm --split test
+python -m src.evaluate --provider openai --split dev    # или --provider llm для Anthropic
+python -m src.evaluate --provider openai --split test
+python -m src.evaluate --provider openai --split hard
 ```
 
 Результаты сохраняются в `results/`.
 
-> **TODO (заполнить своими цифрами после прогона с LLM):**
->
-> | Вариант | dev F1 | test F1 | Тон среди угаданных тем |
-> |---|---|---|---|
-> | Ключевые слова | | | |
-> | LLM, промпт v1 | | | |
-> | LLM, после правок | | | |
+F1 по меткам «тема + тон» (100% значит полное совпадение с эталоном). Набор **hard** это 12 трудных отзывов (отрицание, сарказм, английский, неявные жалобы), которые не использовались при написании промпта.
+
+| Вариант | dev (30) | test (15) | hard (12) |
+|---|---|---|---|
+| Ключевые слова | 90% | 93% | 22% |
+| LLM (`nvidia/nemotron-3-ultra-550b-a55b:free`) | 96% | 95% | 97% |
+
+Доля верного тона среди угаданных тем:
+
+| Вариант | dev | test | hard |
+|---|---|---|---|
+| Ключевые слова | 95% | 100% | 50% |
+| LLM | 98% | 95% | 100% |
+
+Полные выводы с расхождениями лежат в `results/`. Промпт после первого прогона не менялся.
 
 ## Разбор
 
